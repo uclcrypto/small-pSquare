@@ -8,8 +8,7 @@ entity small_pSquare is
            rst : in STD_LOGIC;
            plaintext : in small_pSquare_state;
            key : in small_pSquare_state;
-           tweak0 : in small_pSquare_state;
-           tweak1 : in small_pSquare_state;
+           tweak : in small_pSquare_state;
            ciphertext : out small_pSquare_state;
            done : out STD_LOGIC);
 end small_pSquare;
@@ -46,15 +45,16 @@ architecture Behavioral of small_pSquare is
                mds4_out : out UNSIGNED (bits-1 downto 0));
     end component;
     
-    signal round_tweak0, round_tweak1, round_tweak, art_output, round_reg : small_pSquare_state;
-    signal art_ou, round_tweakey, round_tweakey_input, sq1_in_r : small_pSquare_state_p1;
+    signal round_tweak, art_output, round_reg : small_pSquare_state;
+    signal art_ou, round_tweakey, round_tweakey_input : small_pSquare_state_p1;
     signal round_input, round_output : small_pSquare_state_p2;
-    signal art_o, sq1_in_rr : small_pSquare_state_p3;
+    signal art_o : small_pSquare_state_p3;
     constant pi : STD_LOGIC_VECTOR(63 downto 0) := x"C90FDAA22168C234";
     signal rot_pi : STD_LOGIC_VECTOR(63 downto 0);
     signal round_constants1, round_constants2, sq1_in, sq1_out, sq2_out, sq3_out, mds1_out, mds2_out, mds3_out, mds4_out, mds1_out_reg, mds2_out_reg, mds3_out_reg, mds4_out_reg, sq4_out, sq5_out, sq6_out : small_pSquare_double;
-    signal f1_out, f2_out, f3_out, f4_out : small_pSquare_double_p1;
-    signal tweak_select, tweakey_active : STD_LOGIC;
+    signal sq1_in_r, f1_out, f2_out, f3_out, f4_out : small_pSquare_double_p1;
+    signal sq1_in_rr : small_pSquare_double_p3;
+    signal tweakey_active : STD_LOGIC;
     
 begin
 
@@ -119,7 +119,6 @@ begin
     
     -- Round Tweakey Addition only active every N_r Rounds
     round_tweakey_input <= round_tweakey when tweakey_active = '1' else (others => (others => '0'));
-    round_tweak <= round_tweak0 when tweak_select = '0' else round_tweak1;
     
     -- Round Input Mux
     RoundInput: for i in 0 to 15 generate
@@ -129,13 +128,12 @@ begin
     -- State Machine
     FSM: process(clk)
         variable stepcounter : integer range 0 to 3;
-        variable roundcounter : integer range 0 to 20;
+        variable roundcounter : integer range 0 to 15;
         variable doneflag : integer range 0 to 1;
     begin
         if rising_edge(clk) then
             if (rst = '1') then
-                round_tweak0                    <= tweak0;
-                round_tweak1                    <= tweak1;
+                round_tweak                     <= tweak;
                 round_reg                       <= art_output;
                 rot_pi                          <= pi;
                 stepcounter                     := 0;
@@ -147,7 +145,6 @@ begin
                 mds2_out_reg                    <= mds2_out;
                 mds3_out_reg                    <= mds3_out;
                 mds4_out_reg                    <= mds4_out;
-                tweak_select                    <= '0';
             else
                 if(doneflag = 0) then
                     round_reg                   <= art_output;
@@ -160,15 +157,9 @@ begin
                         stepcounter             := stepcounter + 1;
                         tweakey_active          <= '0';
                     else
-                        if((roundcounter mod 2) = 0) then
-                            round_tweak0        <= ((round_tweak0( 9)(5) & round_tweak0( 9)(0) & round_tweak0( 9)(3) & round_tweak0( 9)(1) & round_tweak0( 9)(6) & round_tweak0( 9)(4) & round_tweak0( 9)(2)), (round_tweak0( 5)(4) & round_tweak0( 5)(6) & round_tweak0( 5)(2) & round_tweak0( 5)(0) & round_tweak0( 5)(5) & round_tweak0( 5)(3) & round_tweak0( 5)(1)), (round_tweak0(13)(3) & round_tweak0(13)(5) & round_tweak0(13)(1) & round_tweak0(13)(6) & round_tweak0(13)(4) & round_tweak0(13)(2) & round_tweak0(13)(0)), (round_tweak0(15)(2) & round_tweak0(15)(4) & round_tweak0(15)(0) & round_tweak0(15)(5) & round_tweak0(15)(3) & round_tweak0(15)(1) & round_tweak0(15)(6)), (round_tweak0(12)(1) & round_tweak0(12)(3) & round_tweak0(12)(6) & round_tweak0(12)(4) & round_tweak0(12)(2) & round_tweak0(12)(0) & round_tweak0(12)(5)), (round_tweak0( 7)(0) & round_tweak0( 7)(2) & round_tweak0( 7)(5) & round_tweak0( 7)(3) & round_tweak0( 7)(1) & round_tweak0( 7)(6) & round_tweak0( 7)(4)), (round_tweak0(14)(6) & round_tweak0(14)(1) & round_tweak0(14)(4) & round_tweak0(14)(2) & round_tweak0(14)(0) & round_tweak0(14)(5) & round_tweak0(14)(3)), (round_tweak0( 2)(5) & round_tweak0( 2)(0) & round_tweak0( 2)(3) & round_tweak0( 2)(1) & round_tweak0( 2)(6) & round_tweak0( 2)(4) & round_tweak0( 2)(2)), (round_tweak0( 4)(4) & round_tweak0( 4)(6) & round_tweak0( 4)(2) & round_tweak0( 4)(0) & round_tweak0( 4)(5) & round_tweak0( 4)(3) & round_tweak0( 4)(1)), (round_tweak0( 6)(3) & round_tweak0( 6)(5) & round_tweak0( 6)(1) & round_tweak0( 6)(6) & round_tweak0( 6)(4) & round_tweak0( 6)(2) & round_tweak0( 6)(0)), (round_tweak0( 8)(2) & round_tweak0( 8)(4) & round_tweak0( 8)(0) & round_tweak0( 8)(5) & round_tweak0( 8)(3) & round_tweak0( 8)(1) & round_tweak0( 8)(6)), (round_tweak0( 3)(1) & round_tweak0( 3)(3) & round_tweak0( 3)(6) & round_tweak0( 3)(4) & round_tweak0( 3)(2) & round_tweak0( 3)(0) & round_tweak0( 3)(5)), (round_tweak0(10)(0) & round_tweak0(10)(2) & round_tweak0(10)(5) & round_tweak0(10)(3) & round_tweak0(10)(1) & round_tweak0(10)(6) & round_tweak0(10)(4)), (round_tweak0( 1)(6) & round_tweak0( 1)(1) & round_tweak0( 1)(4) & round_tweak0( 1)(2) & round_tweak0( 1)(0) & round_tweak0( 1)(5) & round_tweak0( 1)(3)), (round_tweak0(11)(5) & round_tweak0(11)(0) & round_tweak0(11)(3) & round_tweak0(11)(1) & round_tweak0(11)(6) & round_tweak0(11)(4) & round_tweak0(11)(2)), (round_tweak0( 0)(4) & round_tweak0( 0)(6) & round_tweak0( 0)(2) & round_tweak0( 0)(0) & round_tweak0( 0)(5) & round_tweak0( 0)(3) & round_tweak0( 0)(1)));
-                            tweak_select        <= '1';
-                        else
-                            round_tweak1        <= ((round_tweak1( 9)(5) & round_tweak1( 9)(0) & round_tweak1( 9)(3) & round_tweak1( 9)(1) & round_tweak1( 9)(6) & round_tweak1( 9)(4) & round_tweak1( 9)(2)), (round_tweak1( 5)(4) & round_tweak1( 5)(6) & round_tweak1( 5)(2) & round_tweak1( 5)(0) & round_tweak1( 5)(5) & round_tweak1( 5)(3) & round_tweak1( 5)(1)), (round_tweak1(13)(3) & round_tweak1(13)(5) & round_tweak1(13)(1) & round_tweak1(13)(6) & round_tweak1(13)(4) & round_tweak1(13)(2) & round_tweak1(13)(0)), (round_tweak1(15)(2) & round_tweak1(15)(4) & round_tweak1(15)(0) & round_tweak1(15)(5) & round_tweak1(15)(3) & round_tweak1(15)(1) & round_tweak1(15)(6)), (round_tweak1(12)(1) & round_tweak1(12)(3) & round_tweak1(12)(6) & round_tweak1(12)(4) & round_tweak1(12)(2) & round_tweak1(12)(0) & round_tweak1(12)(5)), (round_tweak1( 7)(0) & round_tweak1( 7)(2) & round_tweak1( 7)(5) & round_tweak1( 7)(3) & round_tweak1( 7)(1) & round_tweak1( 7)(6) & round_tweak1( 7)(4)), (round_tweak1(14)(6) & round_tweak1(14)(1) & round_tweak1(14)(4) & round_tweak1(14)(2) & round_tweak1(14)(0) & round_tweak1(14)(5) & round_tweak1(14)(3)), (round_tweak1( 2)(5) & round_tweak1( 2)(0) & round_tweak1( 2)(3) & round_tweak1( 2)(1) & round_tweak1( 2)(6) & round_tweak1( 2)(4) & round_tweak1( 2)(2)), (round_tweak1( 4)(4) & round_tweak1( 4)(6) & round_tweak1( 4)(2) & round_tweak1( 4)(0) & round_tweak1( 4)(5) & round_tweak1( 4)(3) & round_tweak1( 4)(1)), (round_tweak1( 6)(3) & round_tweak1( 6)(5) & round_tweak1( 6)(1) & round_tweak1( 6)(6) & round_tweak1( 6)(4) & round_tweak1( 6)(2) & round_tweak1( 6)(0)), (round_tweak1( 8)(2) & round_tweak1( 8)(4) & round_tweak1( 8)(0) & round_tweak1( 8)(5) & round_tweak1( 8)(3) & round_tweak1( 8)(1) & round_tweak1( 8)(6)), (round_tweak1( 3)(1) & round_tweak1( 3)(3) & round_tweak1( 3)(6) & round_tweak1( 3)(4) & round_tweak1( 3)(2) & round_tweak1( 3)(0) & round_tweak1( 3)(5)), (round_tweak1(10)(0) & round_tweak1(10)(2) & round_tweak1(10)(5) & round_tweak1(10)(3) & round_tweak1(10)(1) & round_tweak1(10)(6) & round_tweak1(10)(4)), (round_tweak1( 1)(6) & round_tweak1( 1)(1) & round_tweak1( 1)(4) & round_tweak1( 1)(2) & round_tweak1( 1)(0) & round_tweak1( 1)(5) & round_tweak1( 1)(3)), (round_tweak1(11)(5) & round_tweak1(11)(0) & round_tweak1(11)(3) & round_tweak1(11)(1) & round_tweak1(11)(6) & round_tweak1(11)(4) & round_tweak1(11)(2)), (round_tweak1( 0)(4) & round_tweak1( 0)(6) & round_tweak1( 0)(2) & round_tweak1( 0)(0) & round_tweak1( 0)(5) & round_tweak1( 0)(3) & round_tweak1( 0)(1)));
-                            tweak_select        <= '0';
-                        end if;
+                        round_tweak             <= ((round_tweak( 9)(5) & round_tweak( 9)(0) & round_tweak( 9)(3) & round_tweak( 9)(1) & round_tweak( 9)(6) & round_tweak( 9)(4) & round_tweak( 9)(2)), (round_tweak( 5)(4) & round_tweak( 5)(6) & round_tweak( 5)(2) & round_tweak( 5)(0) & round_tweak( 5)(5) & round_tweak( 5)(3) & round_tweak( 5)(1)), (round_tweak(13)(3) & round_tweak(13)(5) & round_tweak(13)(1) & round_tweak(13)(6) & round_tweak(13)(4) & round_tweak(13)(2) & round_tweak(13)(0)), (round_tweak(15)(2) & round_tweak(15)(4) & round_tweak(15)(0) & round_tweak(15)(5) & round_tweak(15)(3) & round_tweak(15)(1) & round_tweak(15)(6)), (round_tweak(12)(1) & round_tweak(12)(3) & round_tweak(12)(6) & round_tweak(12)(4) & round_tweak(12)(2) & round_tweak(12)(0) & round_tweak(12)(5)), (round_tweak( 7)(0) & round_tweak( 7)(2) & round_tweak( 7)(5) & round_tweak( 7)(3) & round_tweak( 7)(1) & round_tweak( 7)(6) & round_tweak( 7)(4)), (round_tweak(14)(6) & round_tweak(14)(1) & round_tweak(14)(4) & round_tweak(14)(2) & round_tweak(14)(0) & round_tweak(14)(5) & round_tweak(14)(3)), (round_tweak( 2)(5) & round_tweak( 2)(0) & round_tweak( 2)(3) & round_tweak( 2)(1) & round_tweak( 2)(6) & round_tweak( 2)(4) & round_tweak( 2)(2)), (round_tweak( 4)(4) & round_tweak( 4)(6) & round_tweak( 4)(2) & round_tweak( 4)(0) & round_tweak( 4)(5) & round_tweak( 4)(3) & round_tweak( 4)(1)), (round_tweak( 6)(3) & round_tweak( 6)(5) & round_tweak( 6)(1) & round_tweak( 6)(6) & round_tweak( 6)(4) & round_tweak( 6)(2) & round_tweak( 6)(0)), (round_tweak( 8)(2) & round_tweak( 8)(4) & round_tweak( 8)(0) & round_tweak( 8)(5) & round_tweak( 8)(3) & round_tweak( 8)(1) & round_tweak( 8)(6)), (round_tweak( 3)(1) & round_tweak( 3)(3) & round_tweak( 3)(6) & round_tweak( 3)(4) & round_tweak( 3)(2) & round_tweak( 3)(0) & round_tweak( 3)(5)), (round_tweak(10)(0) & round_tweak(10)(2) & round_tweak(10)(5) & round_tweak(10)(3) & round_tweak(10)(1) & round_tweak(10)(6) & round_tweak(10)(4)), (round_tweak( 1)(6) & round_tweak( 1)(1) & round_tweak( 1)(4) & round_tweak( 1)(2) & round_tweak( 1)(0) & round_tweak( 1)(5) & round_tweak( 1)(3)), (round_tweak(11)(5) & round_tweak(11)(0) & round_tweak(11)(3) & round_tweak(11)(1) & round_tweak(11)(6) & round_tweak(11)(4) & round_tweak(11)(2)), (round_tweak( 0)(4) & round_tweak( 0)(6) & round_tweak( 0)(2) & round_tweak( 0)(0) & round_tweak( 0)(5) & round_tweak( 0)(3) & round_tweak( 0)(1)));
                         tweakey_active          <= '1';
-                        if (roundcounter = 20) then
+                        if (roundcounter = 15) then
                             doneflag            := 1;
                             done                <= '1';
                         else

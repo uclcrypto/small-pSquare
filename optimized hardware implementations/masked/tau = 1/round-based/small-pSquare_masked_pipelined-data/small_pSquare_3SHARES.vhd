@@ -79,9 +79,9 @@ architecture Behavioral of small_pSquare_3SHARES is
     end component;
     
     signal round_tweak, round_tweakey_input_1, round_tweakey_input_2, art_output_0, art_output_1, art_output_2, round_reg_0, round_reg_1, round_reg_2, round_reg2_0, round_reg2_1, round_reg2_2 : small_pSquare_state;
-    signal art_ou_0, art_ou_1, art_ou_2, round_tweakey, round_tweakey_input_0, sq1_in_r : small_pSquare_state_p1;
+    signal art_ou_0, art_ou_1, art_ou_2, round_tweakey, round_tweakey_input_0 : small_pSquare_state_p1;
     signal round_input_0, round_input_1,round_input_2, round_output_0, round_output_1, round_output_2 : small_pSquare_state_p2;
-    signal art_o_0, art_o_1, art_o_2, sq1_in_rr : small_pSquare_state_p3;
+    signal art_o_0, art_o_1, art_o_2 : small_pSquare_state_p3;
     constant pi : STD_LOGIC_VECTOR(63 downto 0) := x"C90FDAA22168C234";
     signal rot_pi : STD_LOGIC_VECTOR(63 downto 0);
     signal round_constants1, round_constants2, round_constants2_reg, sq1_in, sq1_in_reg, sq1_out_0, sq2_out_0, sq3_out_0, mds2_out_0, mds4_out_0, mds1_out_0, mds3_out_0, sq4_out_0, sq5_out_0, sq6_out_0 : small_pSquare_double;
@@ -90,9 +90,10 @@ architecture Behavioral of small_pSquare_3SHARES is
     signal mds1_out_reg_0, mds2_out_reg_0, mds3_out_reg_0, mds4_out_reg_0 : small_pSquare_double;
     signal mds1_out_reg_1, mds2_out_reg_1, mds3_out_reg_1, mds4_out_reg_1 : small_pSquare_double;
     signal mds1_out_reg_2, mds2_out_reg_2, mds3_out_reg_2, mds4_out_reg_2 : small_pSquare_double;
-    signal f1_out_0, f2_out_0, f3_out_0, f4_out_0 : small_pSquare_double_p1;
+    signal sq1_in_r, f1_out_0, f2_out_0, f3_out_0, f4_out_0 : small_pSquare_double_p1;
     signal f1_out_1, f2_out_1, f3_out_1, f4_out_1 : small_pSquare_double_p1;
     signal f1_out_2, f2_out_2, f3_out_2, f4_out_2 : small_pSquare_double_p1;
+    signal sq1_in_rr : small_pSquare_double_p3;
     signal tweakey_active, reg_enable : STD_LOGIC;
     
 begin

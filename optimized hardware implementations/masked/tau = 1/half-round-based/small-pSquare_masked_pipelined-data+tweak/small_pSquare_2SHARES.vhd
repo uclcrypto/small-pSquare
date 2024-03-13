@@ -71,9 +71,9 @@ architecture Behavioral of small_pSquare_2SHARES is
     end component;
     
     signal round_tweak1, round_tweak2, round_tweakey_input_1, art_output_0, art_output_1, round_reg_0, round_reg_1, round_reg2_0, round_reg2_1 : small_pSquare_state;
-    signal art_ou_0, art_ou_1, round_tweakey, round_tweakey_input_0, sq1_in_r : small_pSquare_state_p1;
+    signal art_ou_0, art_ou_1, round_tweakey, round_tweakey_input_0 : small_pSquare_state_p1;
     signal round_input_0, round_input_1, round_output_0, round_output_1 : small_pSquare_state_p2;
-    signal art_o_0, art_o_1, sq1_in_rr : small_pSquare_state_p3;
+    signal art_o_0, art_o_1 : small_pSquare_state_p3;
     constant pi : STD_LOGIC_VECTOR(63 downto 0) := x"C90FDAA22168C234";
     signal rot_pi : STD_LOGIC_VECTOR(63 downto 0);
     signal round_constants1, round_constants2, round_constants2_reg, sq1_in, sq1_in_reg : small_pSquare_double;
@@ -83,6 +83,8 @@ architecture Behavioral of small_pSquare_2SHARES is
     signal f1_out_1, f2_out_1, f3_out_1, f4_out_1 : UNSIGNED(7 downto 0);
     signal f4_r4_out_add_0, f3_r5_out_add_0, f2_r6_out_add_0, f1_r7_out_add_0, f4_r10_out_add_0, f3_r11_out_add_0, f2_r12_out_add_0, f1_r13_out_add_0 : UNSIGNED(8 downto 0);
     signal f4_r4_out_add_1, f3_r5_out_add_1, f2_r6_out_add_1, f1_r7_out_add_1, f4_r10_out_add_1, f3_r11_out_add_1, f2_r12_out_add_1, f1_r13_out_add_1 : UNSIGNED(8 downto 0);
+    signal sq1_in_r : small_pSquare_double_p1;
+    signal sq1_in_rr : small_pSquare_double_p3;
     signal tweakey_active, reg_enable, f_select, f_select_reg : STD_LOGIC;
     
 begin

@@ -9,4 +9,5 @@ package small_pSquare_data_types is
     type small_pSquare_state_p3 is array (0 to 15) of UNSIGNED (9 downto 0);
     type small_pSquare_double is array (0 to 1) of UNSIGNED (6 downto 0);
     type small_pSquare_double_p1 is array (0 to 1) of UNSIGNED (7 downto 0);
+    type small_pSquare_double_p3 is array (0 to 1) of UNSIGNED (9 downto 0);
 end package;

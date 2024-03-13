@@ -98,9 +98,9 @@ architecture Behavioral of small_pSquare_4SHARES is
     end component;
     
     signal round_tweak1, round_tweak2, key_reg1_0, key_reg1_1, key_reg1_2, key_reg1_3, key_reg2_0, key_reg2_1, key_reg2_2, key_reg2_3, round_tweakey_input_1, round_tweakey_input_2, round_tweakey_input_3, art_output_0, art_output_1, art_output_2, art_output_3, round_reg_0, round_reg_1, round_reg_2, round_reg_3, round_reg2_0, round_reg2_1, round_reg2_2, round_reg2_3 : small_pSquare_state;
-    signal art_ou_0, art_ou_1, art_ou_2, art_ou_3, round_tweakey, round_tweakey_input_0, sq1_in_r : small_pSquare_state_p1;
+    signal art_ou_0, art_ou_1, art_ou_2, art_ou_3, round_tweakey, round_tweakey_input_0 : small_pSquare_state_p1;
     signal round_input_0, round_input_1,round_input_2, round_input_3, round_output_0, round_output_1, round_output_2, round_output_3 : small_pSquare_state_p2;
-    signal art_o_0, art_o_1, art_o_2, art_o_3, sq1_in_rr : small_pSquare_state_p3;
+    signal art_o_0, art_o_1, art_o_2, art_o_3 : small_pSquare_state_p3;
     constant pi : STD_LOGIC_VECTOR(63 downto 0) := x"C90FDAA22168C234";
     signal rot_pi : STD_LOGIC_VECTOR(63 downto 0);
     signal round_constants1, round_constants2, round_constants2_reg, sq1_in, sq1_in_reg : small_pSquare_double;
@@ -116,6 +116,8 @@ architecture Behavioral of small_pSquare_4SHARES is
     signal f4_r4_out_add_1, f3_r5_out_add_1, f2_r6_out_add_1, f1_r7_out_add_1, f4_r10_out_add_1, f3_r11_out_add_1, f2_r12_out_add_1, f1_r13_out_add_1 : UNSIGNED(8 downto 0);
     signal f4_r4_out_add_2, f3_r5_out_add_2, f2_r6_out_add_2, f1_r7_out_add_2, f4_r10_out_add_2, f3_r11_out_add_2, f2_r12_out_add_2, f1_r13_out_add_2 : UNSIGNED(8 downto 0);
     signal f4_r4_out_add_3, f3_r5_out_add_3, f2_r6_out_add_3, f1_r7_out_add_3, f4_r10_out_add_3, f3_r11_out_add_3, f2_r12_out_add_3, f1_r13_out_add_3 : UNSIGNED(8 downto 0);
+    signal sq1_in_r : small_pSquare_double_p1;
+    signal sq1_in_rr : small_pSquare_double_p3;
     signal tweakey_active, reg_enable, f_select, f_select_reg : STD_LOGIC;
     
 begin
