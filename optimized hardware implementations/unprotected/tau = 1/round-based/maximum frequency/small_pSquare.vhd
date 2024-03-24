@@ -21,14 +21,6 @@ architecture Behavioral of small_pSquare is
                b : out UNSIGNED (bits-1 downto 0));
     end component;
     
-    component FF is
-        Generic ( bits : INTEGER := 7);
-        Port ( clk : in STD_LOGIC;
-               en : in STD_LOGIC;
-               input : in UNSIGNED ((bits-1) downto 0);
-               output : out UNSIGNED ((bits-1) downto 0));
-    end component;
-    
     component MatrixMult_RC is
         Generic ( bits : INTEGER := 7);
         Port ( clk : STD_LOGIC;
