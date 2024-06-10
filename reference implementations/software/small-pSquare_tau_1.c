@@ -197,7 +197,7 @@ int Decrypt(const uint8_t *ciphertext, const uint8_t* key, const uint8_t* tweak,
     }
 
     // Get pi state
-    pi = (pi << ((r_B*r_R) % 64)) | (pi >> (64-((r_B*r_R) % 64)));
+    pi = (pi << ((r_B*r_R) % 64)) | (pi >> ((64-((r_B*r_R) % 64)) % 64));
     // Get last round tweak
     for(int i=0; i<r_B; i++) UpdateRoundTweak(round_tweak);
 
