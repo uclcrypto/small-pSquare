@@ -37,7 +37,7 @@ architecture Behavioral of TB_small_pSquare_3SHARES is
     signal plaintext_t, key_t, ciphertext_t : small_pSquare_state;
     signal plaintext_s0, plaintext_s1, plaintext_s2, key_s0, key_s1, key_s2, ciphertext_s0, ciphertext_s1, ciphertext_s2 : small_pSquare_state;
     signal fresh_randomness : small_pSquare_3SHARES_randomness;
-    constant clk_period : time := 10ns;
+    constant clk_period : time := 10 ns;
 
 begin
 

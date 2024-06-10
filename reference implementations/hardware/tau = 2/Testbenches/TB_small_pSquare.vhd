@@ -22,7 +22,7 @@ architecture Behavioral of TB_small_pSquare is
     
     signal clk, rst, dec, done : STD_LOGIC;
     signal data_input, key, tweak0, tweak1, data_output : small_pSquare_state;
-    constant clk_period : time := 10ns;
+    constant clk_period : time := 10 ns;
 
 begin
 

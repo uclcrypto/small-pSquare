@@ -22,7 +22,7 @@ architecture Behavioral of TB_small_pSquare is
     signal plaintext, ciphertext : small_pSquare_state;
     constant key: small_pSquare_state := ("0101101", "1100000", "0000101", "1101101", "0111011", "0101110", "0001100", "0011110", "0010101", "0101010", "1101011", "1010101", "0000111", "0010001", "0010000", "0100110");
     constant tweak : small_pSquare_state := ("0110010", "0111001", "1001001", "1011010", "1011101", "0101111", "0001101", "0100000", "1110000", "1110111", "1000001", "1011111", "1011111", "1011100", "0010110", "1100001");
-    constant clk_period : time := 10ns;
+    constant clk_period : time := 10 ns;
 
 begin
 

@@ -34,7 +34,7 @@ architecture Behavioral of TB_small_pSquare_2SHARES is
     constant tweak : small_pSquare_state := ("0110010", "0111001", "1001001", "1011010", "1011101", "0101111", "0001101", "0100000", "1110000", "1110111", "1000001", "1011111", "1011111", "1011100", "0010110", "1100001");
     signal plaintext_s0, plaintext_s1, key_s0, key_s1, ciphertext_s0, ciphertext_s1 : small_pSquare_state;
     signal fresh_randomness : small_pSquare_2SHARES_randomness;
-    constant clk_period : time := 10ns;
+    constant clk_period : time := 10 ns;
 
 begin
 

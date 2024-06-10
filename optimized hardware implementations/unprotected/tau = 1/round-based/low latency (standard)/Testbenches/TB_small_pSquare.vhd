@@ -20,7 +20,7 @@ architecture Behavioral of TB_small_pSquare is
     
     signal clk, rst, done : STD_LOGIC;
     signal plaintext, key, tweak, ciphertext : small_pSquare_state;
-    constant clk_period : time := 10ns;
+    constant clk_period : time := 10 ns;
 
 begin
 
